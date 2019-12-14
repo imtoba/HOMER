@@ -3,55 +3,50 @@ import time
 import playsound
 import speech_recognition as sr
 from gtts import gTTS
-# engine = pyttsx3.init('espeak')
-# voices = engine.getProperty()
-# print(voices)
+
 
 def speak(text):
-    tts = gTTS(text= text, lang='en')
-    tts.save("voice.mp3")
-    playsound.playsound("voice.mp3")
-
-speak('Hello SIR........ Welcome back!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! I am FRIDAY. Systems online! What shall I do for you? ')
-
-def get_Audio(tes)
+    tts = gTTS(text=text, lang="en")
+    filename = "voice.mp3"
+    tts.save(filename)
+    playsound.playsound(filename)
 
 
+def get_audio():
+    
+    r = sr.Recognizer()
+    print("Recognizer initialized")
+    with sr.Microphone(device_index=7) as source:
+        print("Getting Ambiance")
+        r.adjust_for_ambient_noise(source,duration=5)
+        print("Done Ambiance")
+        print("Listening...")
+        audio = r.listen(source)
+        said = ""
+        print("Listening Complete!")
+        try:
+            print("Recognizing...")
+            said = r.recognize_google(audio,language='en-in')
+            print(said)
+        except Exception as e:
+            print("Exception: " + str(e))
+
+    return said
+
+text = get_audio()
+to_say = []
+
+print("1ts",to_say)
+if "hello" in text:
+    to_say.append("Hello, How are you...... ")
+    print("ts hello \n",to_say)
+if "what is your name"  in text or "what's your name" in text :
+     print("whats \n")
+     to_say.append("My Name is Friday!!")
+if "the time" in text:
+    to_say.append(" The current time is "+str(time.ctime()))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from gtts import gTTS
-# from io import BytesIO
-# mp3fp = BytesIO()
-# tts = gTTS(text='Hello SIR........ Welcome back!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Does My voice sound natural to you?', lang='en')
-# tts.write_to_fp(mp3fp)
-# #playsound.playsound(mp3fp)# Play f
-# import musicplayer
-# class Song:
-#     def __init__(self, f):
-#         self.f = f
-#     def readPacket(self, size):
-#         return self.f.read(size)
-#     def seekRaw(self, offset, whence):
-#         self.f.seek(offset, whence)
-#         return f.tell()
-# player = musicplayer.createPlayer()
-# player.queue = [Song(mp3_fp)]
-# player.playing = True
+print("\n",to_say)
+speak(''.join(to_say))
